@@ -12,4 +12,4 @@
 
 ## 在线预览
 
-访问 [LyricaHub](https://kaitangkevin.github.io/LyricaHub) 查看在线演示。 
+访问 [LyricaHub](https://kaitangkevin.github.io/LyricaHub) 查看在线演示。
