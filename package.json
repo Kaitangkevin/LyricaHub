@@ -1,0 +1,17 @@
+{
+  "name": "lyrics-website",
+  "version": "1.0.0",
+  "description": "歌词展示网站",
+  "homepage": "https://kaitangkevin.github.io/LyricaHub",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "deploy": "gh-pages -d ."
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
+  }
+} 

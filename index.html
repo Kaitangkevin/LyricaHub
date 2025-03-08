@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歌词库 - 发现音乐的故事</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">歌词库</div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="搜索歌曲、歌手或歌词...">
+            </div>
+            <div class="user-menu">
+                <button class="login-btn">登录</button>
+                <button class="register-btn">注册</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="categories-section glass-module">
+            <h2>音乐分类</h2>
+            <div class="categories">
+                <button class="category active">全部</button>
+                <button class="category">流行</button>
+                <button class="category">摇滚</button>
+                <button class="category">民谣</button>
+                <button class="category">说唱</button>
+                <button class="category">电子</button>
+                <button class="category">古风</button>
+            </div>
+        </section>
+
+        <section class="songs-grid">
+            <!-- 歌曲卡片将通过JavaScript动态生成 -->
+        </section>
+
+        <div class="pagination glass-module">
+            <button class="prev-page"><i class="fas fa-chevron-left"></i></button>
+            <span class="page-number">1</span>
+            <button class="next-page"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </main>
+
+    <footer class="footer glass-module">
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="logo">歌词库</div>
+                <p>发现音乐的故事</p>
+                <p class="footer-copyright">© 2024 KevinStudio工作室. All rights reserved.</p>
+            </div>
+            <div class="footer-section">
+                <h3>关于我们</h3>
+                <p>致力于为用户提供优质的歌词内容和音乐社区</p>
+            </div>
+            <div class="footer-section">
+                <h3>快速链接</h3>
+                <ul>
+                    <li><a href="#">热门歌词</a></li>
+                    <li><a href="#">最新上传</a></li>
+                    <li><a href="#">歌手列表</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>联系我们</h3>
+                <p>邮箱：guozijun_hezuo@163.com</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-weixin"></i></a>
+                    <a href="#"><i class="fab fa-weibo"></i></a>
+                    <a href="#"><i class="fab fa-qq"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 歌曲详情模态框 -->
+    <div class="modal" id="songDetailModal">
+        <div class="modal-content">
+            <button class="modal-close"><i class="fas fa-times"></i></button>
+            <div class="song-detail">
+                <!-- 内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录模态框 -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <h2>用户登录</h2>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">邮箱</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">密码</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="showRegisterModal()">注册账号</button>
+                    <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close"><i class="fas fa-times"></i></button>
+            <div class="modal-header">
+                <h2>用户注册</h2>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">用户名</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">邮箱</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">密码</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="showLoginModal()">返回登录</button>
+                    <button type="submit" class="btn btn-primary">注册</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/services/lyricsService.js"></script>
+    <script src="js/services/userService.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
