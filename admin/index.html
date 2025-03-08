@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歌词库管理系统</title>
+    <link rel="stylesheet" href="../styles/admin.css">
+    <link rel="stylesheet" href="../styles/modal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-gradient"></div>
+    
+    <div class="admin-container">
+        <aside class="sidebar glass-module">
+            <div class="sidebar-header">
+                <h2>歌词库管理</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#" class="active" data-section="lyrics">
+                            <i class="fas fa-music"></i>
+                            <span>歌词管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="users">
+                            <i class="fas fa-users"></i>
+                            <span>用户管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="categories">
+                            <i class="fas fa-tags"></i>
+                            <span>分类管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="comments">
+                            <i class="fas fa-comments"></i>
+                            <span>评论管理</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="statistics">
+                            <i class="fas fa-chart-line"></i>
+                            <span>数据统计</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" data-section="settings">
+                            <i class="fas fa-cog"></i>
+                            <span>系统设置</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header glass-module">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="搜索...">
+                </div>
+                <div class="header-actions">
+                    <button class="btn-notification">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+                    <button class="btn-profile">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- 歌词管理部分 -->
+                <section id="lyrics-section" class="content-section active">
+                    <div class="section-header glass-module">
+                        <h2>歌词管理</h2>
+                        <button class="btn btn-primary" id="addLyricBtn">
+                            <i class="fas fa-plus"></i>
+                            添加歌词
+                        </button>
+                    </div>
+
+                    <div class="data-filters glass-module">
+                        <div class="filter-group">
+                            <label>分类</label>
+                            <select>
+                                <option value="">全部</option>
+                                <option value="pop">流行</option>
+                                <option value="rock">摇滚</option>
+                                <option value="folk">民谣</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>状态</label>
+                            <select>
+                                <option value="">全部</option>
+                                <option value="published">已发布</option>
+                                <option value="draft">草稿</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>排序</label>
+                            <select>
+                                <option value="newest">最新添加</option>
+                                <option value="popular">最受欢迎</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="data-table glass-module">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>歌名</th>
+                                    <th>歌手</th>
+                                    <th>分类</th>
+                                    <th>状态</th>
+                                    <th>添加时间</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 数据将通过JavaScript动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination glass-module">
+                        <button class="prev-page" title="上一页"><i class="fas fa-chevron-left"></i></button>
+                        <span class="page-number">1 / 10</span>
+                        <button class="next-page" title="下一页"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </section>
+
+                <!-- 用户管理部分 -->
+                <section id="users-section" class="content-section">
+                    <div class="section-header glass-module">
+                        <h2>用户管理</h2>
+                    </div>
+
+                    <div class="data-filters glass-module">
+                        <div class="filter-group">
+                            <label>状态</label>
+                            <select id="userStatusFilter">
+                                <option value="">全部</option>
+                                <option value="正常">正常</option>
+                                <option value="禁用">禁用</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>角色</label>
+                            <select id="userRoleFilter">
+                                <option value="">全部</option>
+                                <option value="admin">管理员</option>
+                                <option value="user">普通用户</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="data-table glass-module">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>邮箱</th>
+                                    <th>注册时间</th>
+                                    <th>最后登录</th>
+                                    <th>状态</th>
+                                    <th>角色</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 用户数据将通过JavaScript动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 统计部分 -->
+                <section id="statistics-section" class="content-section">
+                    <div class="section-header glass-module">
+                        <h2>数据统计</h2>
+                        <div class="date-filter">
+                            <select id="timeRange">
+                                <option value="today">今日</option>
+                                <option value="week">本周</option>
+                                <option value="month">本月</option>
+                                <option value="year">全年</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card glass-module">
+                            <div class="stat-icon">
+                                <i class="fas fa-music"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>总歌词数</h3>
+                                <p class="stat-number" id="totalLyrics">0</p>
+                                <p class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>12%</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-module">
+                            <div class="stat-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>总浏览量</h3>
+                                <p class="stat-number" id="totalViews">0</p>
+                                <p class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>8%</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-module">
+                            <div class="stat-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>总收藏数</h3>
+                                <p class="stat-number" id="totalLikes">0</p>
+                                <p class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>15%</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-module">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>活跃用户</h3>
+                                <p class="stat-number" id="activeUsers">0</p>
+                                <p class="stat-trend up">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>5%</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-card glass-module">
+                            <h3>歌词分类统计</h3>
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                        <div class="chart-card glass-module">
+                            <h3>访问趋势</h3>
+                            <canvas id="trendsChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- 添加/编辑歌词模态框 -->
+    <div class="modal" id="lyricModal">
+        <div class="modal-content">
+            <button type="button" class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2>添加歌词</h2>
+            </div>
+            <form id="lyricForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="songTitle">歌名</label>
+                        <input type="text" name="songTitle" id="songTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="artist">歌手</label>
+                        <input type="text" name="artist" id="artist" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category">分类</label>
+                        <select name="category" id="category" required>
+                            <option value="流行">流行</option>
+                            <option value="摇滚">摇滚</option>
+                            <option value="民谣">民谣</option>
+                            <option value="电子">电子</option>
+                            <option value="古风">古风</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="rank">TOP排名</label>
+                        <input type="number" name="rank" id="rank" min="1" placeholder="输入排名（可选）">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status">状态</label>
+                        <select name="status" id="status" required>
+                            <option value="已发布">发布</option>
+                            <option value="草稿">草稿</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="lyrics">歌词内容</label>
+                    <textarea name="lyrics" id="lyrics" rows="10" required 
+                        placeholder="请输入歌词内容，每行一句..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>播放平台</label>
+                    <div class="platform-checkboxes">
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="spotify">
+                            <div class="checkbox-content">
+                                <i class="fab fa-spotify"></i>
+                                <span>Spotify</span>
+                            </div>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="netease">
+                            <div class="checkbox-content">
+                                <i class="fas fa-music"></i>
+                                <span>网易云音乐</span>
+                            </div>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="qqmusic">
+                            <div class="checkbox-content">
+                                <i class="fas fa-music"></i>
+                                <span>QQ音乐</span>
+                            </div>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="apple">
+                            <div class="checkbox-content">
+                                <i class="fab fa-apple"></i>
+                                <span>Apple Music</span>
+                            </div>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="kugou">
+                            <div class="checkbox-content">
+                                <i class="fas fa-music"></i>
+                                <span>酷狗音乐</span>
+                            </div>
+                        </label>
+                        <label class="platform-checkbox">
+                            <input type="checkbox" name="platforms" value="kuwo">
+                            <div class="checkbox-content">
+                                <i class="fas fa-music"></i>
+                                <span>酷我音乐</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">取消</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/services/lyricsService.js"></script>
+    <script src="../js/services/userService.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html> 

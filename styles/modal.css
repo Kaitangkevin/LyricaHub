@@ -1,0 +1,453 @@
+/* 通用模态框样式 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: var(--glass-border);
+    border-radius: 24px;
+    width: 95%;
+    max-width: min(900px, 90vw);
+    max-height: min(90vh, 800px);
+    overflow-y: auto;
+    padding: min(2rem, 5vw);
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+}
+
+/* 歌词详情模态框特定样式 */
+#songDetailModal .modal-content {
+    max-width: 600px;
+    padding: 2rem;
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.modal-header p {
+    color: #6b7280;
+}
+
+.modal-close {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1010;
+}
+
+.modal-close:hover {
+    background: #f3f4f6;
+    transform: rotate(90deg);
+}
+
+.modal-close i {
+    font-size: 1.25rem;
+    color: #4b5563;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(209, 213, 219, 0.5);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    margin-top: 0.5rem;
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-group input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: var(--button-gradient);
+    color: white;
+    border: none;
+}
+
+.btn-secondary {
+    background: white;
+    border: 1px solid rgba(209, 213, 219, 0.5);
+}
+
+.social-login {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.social-login p {
+    color: #6b7280;
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.social-login p::before,
+.social-login p::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: rgba(209, 213, 219, 0.5);
+}
+
+.social-login p::before {
+    left: 0;
+}
+
+.social-login p::after {
+    right: 0;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.social-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(209, 213, 219, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.song-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.song-detail-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.song-detail-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+}
+
+.song-detail-artist {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.25rem;
+    color: #4b5563;
+}
+
+.song-detail-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #6b7280;
+}
+
+.category-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(99, 102, 241, 0.1);
+    color: #6366f1;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.add-time {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.platforms-title,
+.lyrics-title {
+    font-size: 1.25rem;
+    color: #374151;
+    margin-bottom: 1rem;
+}
+
+.platforms-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.platform-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.platform-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.song-lyrics-container {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.song-lyrics {
+    white-space: pre-line;
+    line-height: 2;
+    color: #4b5563;
+}
+
+.song-lyrics p {
+    margin: 0.5rem 0;
+}
+
+.detail-rank {
+    padding: 0.5rem 1rem;
+    background: var(--primary-gradient);
+    color: white;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+/* 添加歌词模态框特定样式 */
+#lyricModal .modal-content {
+    max-width: 900px;
+}
+
+/* 自定义滚动条 */
+.modal-content::-webkit-scrollbar,
+.song-lyrics::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.song-lyrics::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.song-lyrics::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.2);
+    border-radius: 4px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-content {
+        width: 98%;
+        padding: 1rem;
+    }
+
+    .song-detail-title {
+        font-size: 1.5rem;
+    }
+
+    .song-detail-artist {
+        font-size: 1rem;
+    }
+
+    .song-lyrics {
+        padding: 1rem;
+        max-height: 40vh;
+    }
+
+    .platform-link {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+
+    .platform-checkboxes {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .platform-checkboxes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 动画效果 */
+@keyframes slideIn {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 平台选择样式优化 */
+.platform-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.platform-checkbox {
+    position: relative;
+    cursor: pointer;
+}
+
+.platform-checkbox input {
+    position: absolute;
+    opacity: 0;
+}
+
+.platform-checkbox .checkbox-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    transition: all 0.3s ease;
+    gap: 0.5rem;
+}
+
+.platform-checkbox input:checked + .checkbox-content {
+    background: var(--primary-gradient);
+    border-color: transparent;
+    transform: translateY(-2px);
+    box-shadow: var(--hover-shadow);
+}
+
+.platform-checkbox input:checked + .checkbox-content i,
+.platform-checkbox input:checked + .checkbox-content span {
+    color: white;
+}
+
+.platform-checkbox .checkbox-content i {
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.platform-checkbox .checkbox-content span {
+    font-size: 0.875rem;
+    transition: color 0.3s ease;
+}
+
+/* 平台图标颜色 */
+.platform-checkbox .fa-spotify { color: #1DB954; }
+.platform-checkbox .fa-apple { color: #000000; }
+.platform-checkbox .fa-music { color: #6366f1; } 
