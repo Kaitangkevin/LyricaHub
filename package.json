@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "deploy": "gh-pages -d ."
+    "predeploy": "mkdir -p build && cp -r index.html styles js admin build/",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "express": "^4.17.1"
