@@ -1,3 +1,8 @@
+// 在文件开头添加认证检查
+if (localStorage.getItem('adminAuthenticated') !== 'true') {
+    window.location.href = 'login.html';
+}
+
 // 在文件顶部引入服务
 document.addEventListener('DOMContentLoaded', function() {
     // 获取DOM元素
@@ -107,16 +112,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 添加歌词按钮点击事件
     addLyricBtn.addEventListener('click', function() {
+        modalTitle.textContent = '添加歌词';
+        lyricForm.reset();
+        delete lyricForm.dataset.editId;
         lyricModal.classList.add('active');
         document.body.style.overflow = 'hidden';
     });
 
     // 关闭模态框函数
-    window.closeModal = function() {
+    function closeModal() {
         lyricModal.classList.remove('active');
         document.body.style.overflow = '';
         lyricForm.reset();
-    };
+        delete lyricForm.dataset.editId;
+        modalTitle.textContent = '添加歌词';
+    }
 
     // 表单提交处理
     lyricForm.addEventListener('submit', function(e) {
@@ -133,7 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
             category: document.getElementById('category').value,
             status: document.getElementById('status').value,
             lyrics: document.getElementById('lyrics').value.trim(),
-            platforms: selectedPlatforms
+            platforms: selectedPlatforms,
+            rank: document.getElementById('rank').value ? parseInt(document.getElementById('rank').value) : null
         };
 
         // 验证必填字段
@@ -142,15 +153,30 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // 使用服务添加歌词
-        lyricsService.addLyric(formData);
+        const editId = this.dataset.editId;
+        if (editId) {
+            // 更新现有歌词
+            lyricsService.updateLyric(parseInt(editId), {
+                ...formData,
+                id: parseInt(editId)
+            });
+            alert('歌词更新成功！');
+        } else {
+            // 添加新歌词
+            lyricsService.addLyric(formData);
+            alert('歌词添加成功！');
+        }
 
-        // 更新表格
-        renderLyricsTable();
+        // 重置表单和状态
+        this.reset();
+        delete this.dataset.editId;
+        modalTitle.textContent = '添加歌词';
 
         // 关闭模态框
         closeModal();
-        alert('歌词添加成功！');
+        
+        // 刷新表格
+        renderLyricsTable();
     });
 
     // 点击模态框外部关闭
@@ -169,14 +195,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 编辑歌词
     function editLyric(id) {
-        showModal(id);
+        const lyric = lyricsService.getAllLyrics().find(l => l.id === parseInt(id));
+        if (!lyric) return;
+
+        // 更新模态框标题
+        modalTitle.textContent = '编辑歌词';
+
+        // 填充表单数据
+        document.getElementById('songTitle').value = lyric.title;
+        document.getElementById('artist').value = lyric.artist;
+        document.getElementById('category').value = lyric.category;
+        document.getElementById('status').value = lyric.status;
+        document.getElementById('rank').value = lyric.rank || '';
+        document.getElementById('lyrics').value = lyric.lyrics;
+
+        // 设置平台选择
+        document.querySelectorAll('input[name="platforms"]').forEach(checkbox => {
+            checkbox.checked = lyric.platforms && lyric.platforms.includes(checkbox.value);
+        });
+
+        // 保存当前编辑的歌词ID
+        lyricForm.dataset.editId = id;
+
+        // 显示模态框
+        lyricModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
     }
 
     // 删除歌词
     function deleteLyric(id) {
-        if (confirm('确定要删除这条歌词吗？')) {
-            lyricsService.deleteLyric(id);
+        if (confirm('确定要删除这条歌词吗？此操作不可恢复。')) {
+            lyricsService.deleteLyric(parseInt(id));
             renderLyricsTable();
+            alert('歌词已删除');
         }
     }
 
@@ -297,6 +348,19 @@ document.addEventListener('DOMContentLoaded', function() {
             renderLyricsTable();
         }
     });
+
+    // 添加登出功能
+    function logout() {
+        localStorage.removeItem('adminAuthenticated');
+        window.location.href = 'login.html';
+    }
+
+    // 在header-actions中添加登出按钮
+    document.querySelector('.header-actions').innerHTML += `
+        <button class="btn-logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+        </button>
+    `;
 });
 
 // 在现有代码中添加统计功能

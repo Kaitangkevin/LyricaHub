@@ -96,21 +96,25 @@
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <button class="modal-close"><i class="fas fa-times"></i></button>
-            <div class="modal-header">
-                <h2>用户登录</h2>
+            <div class="form-header">
+                <h2>欢迎回来</h2>
+                <p>请登录您的账号</p>
             </div>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="loginEmail">邮箱</label>
-                    <input type="email" id="loginEmail" required>
+                    <input type="email" id="loginEmail" required placeholder="请输入邮箱">
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">密码</label>
-                    <input type="password" id="loginPassword" required>
+                    <input type="password" id="loginPassword" required placeholder="请输入密码">
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="showRegisterModal()">注册账号</button>
                     <button type="submit" class="btn btn-primary">登录</button>
+                </div>
+                <div class="form-footer">
+                    <a href="#">忘记密码？</a>
                 </div>
             </form>
         </div>
@@ -120,25 +124,26 @@
     <div class="modal" id="registerModal">
         <div class="modal-content">
             <button class="modal-close"><i class="fas fa-times"></i></button>
-            <div class="modal-header">
-                <h2>用户注册</h2>
+            <div class="form-header">
+                <h2>创建账号</h2>
+                <p>加入我们的音乐社区</p>
             </div>
             <form id="registerForm">
                 <div class="form-group">
                     <label for="registerName">用户名</label>
-                    <input type="text" id="registerName" required>
+                    <input type="text" id="registerName" required placeholder="请输入用户名">
                 </div>
                 <div class="form-group">
                     <label for="registerEmail">邮箱</label>
-                    <input type="email" id="registerEmail" required>
+                    <input type="email" id="registerEmail" required placeholder="请输入邮箱">
                 </div>
                 <div class="form-group">
                     <label for="registerPassword">密码</label>
-                    <input type="password" id="registerPassword" required>
+                    <input type="password" id="registerPassword" required placeholder="请输入密码">
                 </div>
                 <div class="form-group">
                     <label for="confirmPassword">确认密码</label>
-                    <input type="password" id="confirmPassword" required>
+                    <input type="password" id="confirmPassword" required placeholder="请再次输入密码">
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" onclick="showLoginModal()">返回登录</button>
