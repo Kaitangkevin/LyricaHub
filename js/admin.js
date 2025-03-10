@@ -363,43 +363,131 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
 });
 
-// 在现有代码中添加统计功能
+// 修改数据统计功能
 function updateStatistics() {
-    // 计算总数
-    const totalLyrics = lyrics.length;
-    const totalViews = lyrics.reduce((sum, lyric) => sum + lyric.views, 0);
-    const totalLikes = lyrics.reduce((sum, lyric) => sum + lyric.likes, 0);
+    const now = new Date();
+    const lastUpdate = localStorage.getItem('lastStatsUpdate');
+    const previousStats = JSON.parse(localStorage.getItem('previousStats')) || {};
     
-    // 更新显示
-    document.getElementById('totalLyrics').textContent = totalLyrics;
-    document.getElementById('totalViews').textContent = totalViews.toLocaleString();
-    document.getElementById('totalLikes').textContent = totalLikes.toLocaleString();
-    document.getElementById('activeUsers').textContent = '1,234'; // 示例数据
+    // 如果是首次更新或距离上次更新超过24小时，则更新统计数据
+    if (!lastUpdate || (now - new Date(lastUpdate)) > 24 * 60 * 60 * 1000) {
+        const lyrics = lyricsService.getAllLyrics();
+        const users = userService.getAllUsers();
+        
+        // 计算基础统计数据
+        const stats = {
+            totalLyrics: lyrics.length,
+            publishedLyrics: lyrics.filter(l => l.status === '已发布').length,
+            totalViews: lyrics.reduce((sum, l) => sum + (l.views || 0), 0),
+            totalLikes: lyrics.reduce((sum, l) => sum + (l.likes || 0), 0),
+            activeUsers: users.filter(u => {
+                const lastActivity = new Date(u.lastActivityTime || u.lastLoginTime);
+                return (now - lastActivity) <= 7 * 24 * 60 * 60 * 1000;
+            }).length,
+            categoriesCount: {},
+            weeklyTrends: []
+        };
 
-    // 如果使用Chart.js，更新图表
-    updateCharts();
+        // 计算变化百分比
+        const changes = {
+            totalLyrics: calculateChange(stats.totalLyrics, previousStats.totalLyrics),
+            publishedLyrics: calculateChange(stats.publishedLyrics, previousStats.publishedLyrics),
+            totalViews: calculateChange(stats.totalViews, previousStats.totalViews),
+            totalLikes: calculateChange(stats.totalLikes, previousStats.totalLikes),
+            activeUsers: calculateChange(stats.activeUsers, previousStats.activeUsers)
+        };
+
+        // 统计分类数据
+        lyrics.forEach(lyric => {
+            if (lyric.category) {
+                stats.categoriesCount[lyric.category] = (stats.categoriesCount[lyric.category] || 0) + 1;
+            }
+        });
+
+        // 更新分类管理中的数据
+        updateCategoryCards(stats.categoriesCount);
+
+        // 更新统计显示
+        updateStatisticsDisplay(stats, changes);
+
+        // 更新图表
+        updateCharts(stats);
+
+        // 保存当前统计作为下次比较的基准
+        localStorage.setItem('previousStats', JSON.stringify(stats));
+        localStorage.setItem('lastStatsUpdate', now.toISOString());
+        localStorage.setItem('siteStats', JSON.stringify(stats));
+    }
 }
 
-function updateCharts() {
-    // 分类统计
-    const categories = {};
-    lyrics.forEach(lyric => {
-        categories[lyric.category] = (categories[lyric.category] || 0) + 1;
-    });
+// 计算变化百分比
+function calculateChange(current, previous) {
+    if (!previous) return { value: 0, trend: 'neutral' };
+    const change = ((current - previous) / previous) * 100;
+    return {
+        value: Math.abs(change).toFixed(1),
+        trend: change > 0 ? 'up' : change < 0 ? 'down' : 'neutral'
+    };
+}
 
-    // 使用Chart.js绘制图表
+// 更新统计显示
+function updateStatisticsDisplay(stats, changes) {
+    // 更新数值和变化趋势
+    updateStatItem('totalLyrics', stats.totalLyrics, changes.totalLyrics);
+    updateStatItem('publishedLyrics', stats.publishedLyrics, changes.publishedLyrics);
+    updateStatItem('totalViews', stats.totalViews, changes.totalViews);
+    updateStatItem('totalLikes', stats.totalLikes, changes.totalLikes);
+    updateStatItem('activeUsers', stats.activeUsers, changes.activeUsers);
+}
+
+// 更新单个统计项
+function updateStatItem(id, value, change) {
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    const trendIcon = change.trend === 'up' ? '↑' : change.trend === 'down' ? '↓' : '–';
+    const trendClass = change.trend === 'up' ? 'trend-up' : change.trend === 'down' ? 'trend-down' : 'trend-neutral';
+
+    element.innerHTML = `
+        <div class="stat-value">${value.toLocaleString()}</div>
+        <div class="stat-change ${trendClass}">
+            ${trendIcon} ${change.value}%
+        </div>
+    `;
+}
+
+// 更新分类卡片
+function updateCategoryCards(categoriesCount) {
+    const categoriesGrid = document.querySelector('.categories-grid');
+    if (!categoriesGrid) return;
+
+    Object.entries(categoriesCount).forEach(([category, count]) => {
+        const card = categoriesGrid.querySelector(`[data-category="${category}"]`);
+        if (card) {
+            const countElement = card.querySelector('.count');
+            if (countElement) {
+                countElement.textContent = count;
+            }
+        }
+    });
+}
+
+// 更新图表
+function updateCharts(stats) {
+    // 更新分类饼图
     const categoryChart = new Chart(document.getElementById('categoryChart'), {
         type: 'doughnut',
         data: {
-            labels: Object.keys(categories),
+            labels: Object.keys(stats.categoriesCount),
             datasets: [{
-                data: Object.values(categories),
+                data: Object.values(stats.categoriesCount),
                 backgroundColor: [
                     '#6366f1',
                     '#a855f7',
                     '#ec4899',
                     '#3b82f6',
-                    '#10b981'
+                    '#10b981',
+                    '#f59e0b'
                 ]
             }]
         },
@@ -413,23 +501,31 @@ function updateCharts() {
         }
     });
 
-    // 趋势图
+    // 更新趋势图
     const trendsChart = new Chart(document.getElementById('trendsChart'), {
         type: 'line',
         data: {
-            labels: ['一月', '二月', '三月', '四月', '五月', '六月'],
-            datasets: [{
-                label: '访问量',
-                data: [1200, 1900, 3000, 5000, 4000, 6000],
-                borderColor: '#6366f1',
-                tension: 0.4
-            }]
+            labels: stats.weeklyTrends.map(day => day.date),
+            datasets: [
+                {
+                    label: '访问量',
+                    data: stats.weeklyTrends.map(day => day.views),
+                    borderColor: '#6366f1',
+                    tension: 0.4
+                },
+                {
+                    label: '点赞数',
+                    data: stats.weeklyTrends.map(day => day.likes),
+                    borderColor: '#ec4899',
+                    tension: 0.4
+                }
+            ]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    display: false
+                    position: 'top'
                 }
             },
             scales: {
@@ -439,4 +535,12 @@ function updateCharts() {
             }
         }
     });
-} 
+}
+
+// 初始化时更新统计数据
+document.addEventListener('DOMContentLoaded', () => {
+    updateStatistics();
+    
+    // 每小时检查一次是否需要更新
+    setInterval(updateStatistics, 60 * 60 * 1000);
+}); 

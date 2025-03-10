@@ -460,50 +460,34 @@ tr:hover {
 }
 
 .stat-card {
+    position: relative;
     padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
 }
 
-.stat-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    background: var(--primary-gradient);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.25rem;
-}
-
-.stat-info h3 {
-    font-size: 0.875rem;
-    color: #6b7280;
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
-.stat-number {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 0.5rem;
-}
-
-.stat-trend {
+.stat-change {
     font-size: 0.875rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
     gap: 0.25rem;
 }
 
-.stat-trend.up {
-    color: #059669;
+.trend-up {
+    color: #10b981;
 }
 
-.stat-trend.down {
-    color: #dc2626;
+.trend-down {
+    color: #ef4444;
+}
+
+.trend-neutral {
+    color: #6b7280;
 }
 
 /* 图表容器 */
@@ -632,26 +616,29 @@ tr:hover {
 }
 
 .category-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
     transition: all 0.3s ease;
 }
 
 .category-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--hover-shadow);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 
 .category-card h3 {
     font-size: 1.25rem;
     color: #1f2937;
-    margin-bottom: 1rem;
 }
 
-.category-card p {
-    color: #6b7280;
-    font-size: 0.875rem;
+.category-card .count {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #6366f1;
 }
 
 /* 登出按钮样式 */

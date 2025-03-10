@@ -334,8 +334,12 @@ document.addEventListener('DOMContentLoaded', function() {
         updateUserInterface(null);
     };
 
-    // 初始化用户界面
-    updateUserInterface(userService.getCurrentUser());
+    // 初始化用户状态
+    const currentUser = userService.getCurrentUser();
+    if (currentUser) {
+        userService.setupAutoLogout();
+        updateUserInterface(currentUser);
+    }
 
     // 搜索功能
     const searchInput = document.querySelector('.search-bar input');
