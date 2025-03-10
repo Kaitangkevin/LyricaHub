@@ -37,10 +37,15 @@ const userService = {
 
         // 更新最后登录时间
         user.lastLoginTime = new Date().toISOString();
+        // 添加会话开始时间
+        user.sessionStartTime = new Date().toISOString();
+        
         localStorage.setItem('users', JSON.stringify(users));
-
-        // 存储当前用户信息
         localStorage.setItem('currentUser', JSON.stringify(user));
+        
+        // 添加页面关闭时的自动登出
+        this.setupAutoLogout();
+        
         return user;
     },
 
@@ -72,7 +77,37 @@ const userService = {
         return false;
     },
 
-    // 检查登录状态
+    // 添加自动登出设置
+    setupAutoLogout() {
+        // 当页面关闭或刷新时触发
+        window.addEventListener('beforeunload', () => {
+            // 只在页面完全关闭时登出，不在刷新时登出
+            if (!document.hidden) {
+                return;
+            }
+            this.logout();
+        });
+
+        // 当页面变为不可见时触发
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // 存储页面隐藏时间
+                localStorage.setItem('pageHiddenTime', new Date().toISOString());
+            } else {
+                // 页面重新可见时，检查是否是刷新还是重新打开
+                const hiddenTime = localStorage.getItem('pageHiddenTime');
+                if (hiddenTime) {
+                    const timeDiff = new Date() - new Date(hiddenTime);
+                    // 如果页面隐藏超过1小时，视为关闭而不是刷新
+                    if (timeDiff > 60 * 60 * 1000) {
+                        this.logout();
+                    }
+                }
+            }
+        });
+    },
+
+    // 修改检查登录状态方法
     checkLoginStatus() {
         const user = this.getCurrentUser();
         if (user) {
@@ -83,6 +118,9 @@ const userService = {
                 this.logout();
                 return null;
             }
+            // 更新最后活动时间
+            user.lastActivityTime = now.toISOString();
+            localStorage.setItem('currentUser', JSON.stringify(user));
             return user;
         }
         return null;
