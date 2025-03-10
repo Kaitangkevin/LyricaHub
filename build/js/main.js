@@ -151,24 +151,42 @@ document.addEventListener('DOMContentLoaded', function() {
                         <h2 class="song-detail-title">${song.title}</h2>
                         ${song.rank ? `<span class="detail-rank">TOP${song.rank}</span>` : ''}
                     </div>
-                    <p class="song-detail-artist">${song.artist}</p>
+                    <p class="song-detail-artist">
+                        <i class="fas fa-user"></i>
+                        ${song.artist}
+                    </p>
                     <div class="song-detail-meta">
-                        <span class="category-badge">${song.category}</span>
+                        <span class="category-badge">
+                            <i class="fas fa-tag"></i>
+                            ${song.category}
+                        </span>
                     </div>
-                    ${song.platforms ? `
-                        <div class="song-detail-platforms">
+                </div>
+                ${song.platforms ? `
+                    <div class="song-detail-platforms">
+                        <h3 class="platforms-title">
+                            <i class="fas fa-headphones"></i>
+                            收听渠道
+                        </h3>
+                        <div class="platforms-grid">
                             ${song.platforms.map(platform => `
                                 <a href="#" class="platform-link" style="color: ${platformIcons[platform].color}">
                                     <i class="${platformIcons[platform].icon}"></i>
-                                    在 ${platformIcons[platform].name} 上收听
+                                    <span>${platformIcons[platform].name}</span>
                                 </a>
                             `).join('')}
                         </div>
-                    ` : ''}
-                </div>
+                    </div>
+                ` : ''}
             </div>
-            <div class="song-lyrics">
-                ${song.lyrics.split('\n').map(line => `<p>${line}</p>`).join('')}
+            <div class="song-lyrics-container">
+                <h3 class="lyrics-title">
+                    <i class="fas fa-microphone-alt"></i>
+                    歌词
+                </h3>
+                <div class="song-lyrics">
+                    ${song.lyrics.split('\n').map(line => `<p>${line}</p>`).join('')}
+                </div>
             </div>
         `;
 
@@ -337,9 +355,63 @@ document.addEventListener('DOMContentLoaded', function() {
         renderFilteredLyrics(filteredLyrics);
     }, 300));
 
+    // 分类按钮点击事件
+    const categories = document.querySelectorAll('.category');
+    categories.forEach(button => {
+        button.addEventListener('click', () => {
+            // 移除其他按钮的active类
+            categories.forEach(btn => btn.classList.remove('active'));
+            // 添加当前按钮的active类
+            button.classList.add('active');
+            
+            const selectedCategory = button.textContent;
+            filterLyricsByCategory(selectedCategory);
+        });
+    });
+
+    // 按分类筛选歌词
+    function filterLyricsByCategory(category) {
+        const lyrics = lyricsService.getAllLyrics();
+        const filteredLyrics = category === '全部' 
+            ? lyrics.filter(lyric => lyric.status === '已发布')
+            : lyrics.filter(lyric => 
+                lyric.status === '已发布' && 
+                lyric.category === category
+            );
+
+        // 重置分页
+        currentPage = 1;
+        renderFilteredLyrics(filteredLyrics);
+    }
+
+    // 渲染筛选后的歌词
     function renderFilteredLyrics(lyrics) {
-        const songsGrid = document.querySelector('.songs-grid');
-        // ... 渲染逻辑保持不变 ...
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageItems = lyrics.slice(startIndex, endIndex);
+
+        songsGrid.innerHTML = pageItems.map(lyric => `
+            <div class="song-card glass-module" data-id="${lyric.id}">
+                ${lyric.rank ? `<div class="song-rank">TOP${lyric.rank}</div>` : ''}
+                <div class="song-card-content">
+                    <div>
+                        <h3 class="song-title">${lyric.title}</h3>
+                        <p class="song-artist">${lyric.artist}</p>
+                    </div>
+                    <div class="song-card-footer">
+                        <span class="category">${lyric.category}</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // 添加点击事件
+        document.querySelectorAll('.song-card').forEach(card => {
+            card.addEventListener('click', () => showSongDetail(card.dataset.id));
+        });
+
+        // 更新分页信息
+        updatePagination(lyrics.length);
     }
 
     // 防抖函数
